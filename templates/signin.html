@@ -1,0 +1,35 @@
+{% extends 'authLayout.html' %}
+{% block title %}
+    Sign In
+{% endblock  %}
+{% block section %}
+    <div class="container">
+        <a href="index.html">
+          <img alt="mercado logo" id="logo-img" src="{{url_for('static', filename='logo/logo1.png')}}" class="logo-img-card" />
+          <!-- <div class="logo-img-card"><i class="fas fa-book"></i> Reader Space</div> -->
+        </a>
+        <div class="card card-container">
+          <h2 class="login_title text-center">Sign In</h2>
+          <hr />
+          <div id="err_msg" class="err_msg">  {% if message != None %} {{message}}  {% endif %} </div>
+          <form class="form-signin" id="signin-frm" name="signin-frm" action="{{ url_for('index') }}" method="POST">
+            <span id="reauth_email" class="reauth-email"></span>
+            <p class="input_title">E-mail</p>
+            <input type="email" id="email" name="email" class="login_box" placeholder="Enter Email" required="required" autofocus="autofocus" />
+            <p class="input_title">Password</p>
+            <input type="password" id="password" name="password" class="login_box" placeholder="******" required="required" />
+            <div id="remember" class="checkbox">
+              <input type="checkbox" id="rememberMe" value="1" style="border: none; background-color: #ffffff;" />
+              <label for="rememberMe">Remember Me</label>
+              <a href="#" class="forgot-password">forgot password?</a>
+            </div>
+            <button id="submitbtn" class="btn btn-lg btn-signin" Width="100%">Sign In</button>
+          </form>
+          <!-- /form -->
+        </div>
+        <div id="registerdiv">
+          <h3>New to Reader Space ?</h3>
+          <a id="registerbtn" class="btn btn-signup btn-lg" href="{{ url_for('signup') }}">Create your account</a>
+        </div>
+      </div>
+{% endblock  %}

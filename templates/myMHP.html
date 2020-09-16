@@ -1,0 +1,55 @@
+{% extends 'headerFooterLayout.html' %} {% block title %} Search Books {% endblock %} {% block section %}
+<div class="container h-100">
+  <div class="row d-flex justify-content-center h-100">
+    <!-- <div class="d-flex justify-content-center h-100"> -->
+
+    <div class="col-2"></div>
+    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+      <div class="card">
+        <div class="card-body">
+          <h3>Search Books:</h3>
+          <form action="{{ url_for('mhp') }}" method="post">
+          <div class="search-bar">
+              <input class="search-input" type="text" id="bookSearch" name="bookSearch" placeholder="Search..." autofocus />
+              <button type="submit" class="btn search-btn"><i class="fas fa-search"></i></button>
+          </div>
+              <div class="form-group mt-2">
+                <input type="radio" name="category" id="all"  checked/>
+                <label for="all">All</label>
+                <input type="radio" name="category" id="title" />
+                <label for="title">Title</label>
+                <input type="radio" name="category" id="author" />
+                <label for="author">Author</label>
+                <input type="radio" name="category" id="isbn" />
+                <label for="isbn">isbn</label>
+              </div>
+        </form>
+      </div>
+    </div>
+        <div class="search-result">
+          {{noresult}} 
+          {% if results %}
+          <div class="table-responsive">
+            <table class="table">
+              {% for result in results %}
+              <tr class="table-select">
+                <td>
+                  <a href="{{ url_for('bookDetail',isbn=result.isbn) }}">
+                    <h6>{{result.title}}</h6>
+                    <span>by {{result.authorname}} in {{result.year}}</span>
+                  </a>
+                </td>
+              </tr>
+              {% endfor %}
+                <tr>
+                  <td><a href=" {{url_for('books',key=userResponse,page=1)}} ">See all results for &quot;{{userResponse}}&quot; </a></td>
+                </tr>
+            </table>
+          </div>
+          {% endif %}
+        </div>
+    </div>
+    <div class="col-2"></div>
+  </div>
+</div>
+{% endblock %}

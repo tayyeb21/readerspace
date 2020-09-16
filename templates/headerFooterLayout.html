@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %} {% endblock %}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/masterCss.css')}}" />
+    <link rel="icon" href="{{ url_for('static', filename='logo/logo1.png') }}">
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <!-- <script src="https://kit.fontawesome.com/e5a9b2a391.js" crossorigin="anonymous"></script> -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav id="nav-color" class="navbar navbar-expand-lg">
+        <!-- <div class="container"> -->
+          <a href=" {{url_for('mhp')}} " class="navbar-brand">
+            <img src="{{url_for('static', filename='logo/logo1.png')}}" alt="" class="logo d-inline-block align-top" />
+            Reader Space
+          </a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="fas fa-align-justify"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ml-auto px-5">
+              <li class="nav-item active px-3">
+                <a class="nav-link" href="{{ url_for('mhp') }}"><i class="fas fa-home"></i> Home </a>
+              </li>
+              <li class="nav-item px-3">
+                <a class="nav-link" href="{{ url_for('books') }}"><i class="fas fa-book-open"></i> Books</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle px-3" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-account"></i><i class="fas fa-user"></i> Account </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a class="dropdown-item" href="#"> <i class="fas fa-user"></i> My Account</a>
+                  <a class="dropdown-item" href="{{ url_for('review') }}"><i class="fas fa-star-half-alt"></i> My Reviews</a>
+                  <div class="dropdown-divider"></div>
+                  <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-power-off"></i> Log Out</a>
+                </div>
+              </li>
+            </ul>
+          </div>
+        <!-- </div> -->
+      </nav>
+    </header>
+    <section>
+      {% block section %}
+      {% endblock  %}
+    </section>
+    <footer></footer>
+  </body>
+</html>

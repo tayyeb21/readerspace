@@ -1,0 +1,48 @@
+{% extends 'authLayout.html' %}
+{% block title %}
+    Sign Up
+{% endblock  %}
+{% block style  %}
+<!-- body,html{
+    height: auto; -->
+}
+{% endblock  %}
+{% block section %}
+<div class="container">
+            <img alt="mercado logo"  id="logo-img" src="{{ url_for('static', filename='logo/logo1.png') }}" class="logo-img-card" />
+            <div class="card card-container">
+                <h2 class='login_title text-center'>Register</h2>
+                <hr />
+                <div id="err_msg"  class="err_msg"></div>
+                    <form class="form-signin"  id="signup_frm" name="signup_frm" action="{{ url_for('signup') }}" method="POST">
+                        <span id="reauth_email"  class="reauth-email"></span>
+                        <p class="input_title" >Your Name <span class="err_msg" id="error_msg_name">*</span></p>
+                        <div class="form-row"> 
+                            <div class="col">
+                                <input type="text" id="firstName" name="firstName"  class="login_box" placeholder="First Name" required="required"  autofocus="autofocus" />
+                            </div>
+                                <div class="col">
+                            <input type="text" id="middleName" name="middleName"  class="login_box" placeholder="Middle Name(optional)" />
+                                </div>
+                            <div class="col">
+                                <input type="text" id="lastName" name="lastName"  class="login_box" placeholder="Last Name" required="required" />
+                            </div>
+                        </div>
+                        <!-- <p class="input_title" >Last Name <span class="err_msg" id="error_msg_name">*</span></p> -->
+
+                        <p class="input_title" >E-mail <span class="err_msg" id="error_msg_email">*</span></p>
+                        <input type="email" id="email" name="email"  class="login_box" placeholder="Your E-mail" required="required" title="Please enter a valid E-mail"  />
+
+                        <p class="input_title" >Password <span class="err_msg">*</span></p>
+                        <input type="password" id="pswd" name="pswd" class="login_box" placeholder="Your Password"  required="required" onchange="validatePassword();" />
+
+                        <p class="input_title" >Confirm Password <span class="err_msg">*</span></p>
+                        <input type="password" id="cnfpassword"  class="login_box" placeholder="Confirm Password" required="required" onkeyup="validatePassword();" />
+                        
+                        <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-lg btn-signin" >Create Account</button><br />
+
+                        <span>Already have an Account? <a href="{{ url_for('index') }}" id="linksignin" class="forgot-password" >Sign In</a></span>                
+                        </form><!-- /form -->
+                </div>
+            </div>
+{% endblock %}

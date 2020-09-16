@@ -1,0 +1,213 @@
+$btnColor: rgb(255, 165, 0);
+$btnHover: rgb(255, 153, 0);
+body,
+html {
+  background: #bdc3c7; /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #2c3e50, #bdc3c7) no-repeat fixed center; /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #2c3e50, #bdc3c7) no-repeat fixed center; /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+.login_box {
+  background: #f7f7f7;
+  border: 3px solid #f4f4f4;
+  padding-left: 15px;
+  margin-bottom: 20px;
+}
+.input_title {
+  color: rgba(164, 164, 164, 0.9);
+  padding-left: 3px;
+  margin-bottom: 2px;
+}
+
+hr {
+  width: 100%;
+}
+
+.welcome {
+  font-family: "myriad-pro", sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  color: #ffffff;
+  margin-bottom: 25px;
+  margin-top: 50px;
+}
+
+.login_title {
+  font-family: "myriad-pro", sans-serif;
+  font-style: normal;
+  font-weight: 100;
+  color: rgba(164, 164, 164, 0.44);
+}
+
+.card-container.card {
+  max-width: 350px;
+}
+.register-card {
+  .card-container.card {
+    max-width: 50%;
+  }
+}
+@media screen and (max-width: 768px) {
+  .card-container.card {
+    width: 100%;
+  }
+  .register-card {
+    .card-container.card {
+      max-width: 100%;
+    }
+  }
+}
+
+.btn {
+  font-weight: 700;
+  height: 36px;
+  color: white;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  border-radius: 0;
+  height: 55px;
+  margin-bottom: 10px;
+}
+/*
+* Card component
+*/
+.card {
+  background-color: #ffffff;
+  /* just in case there no content*/
+  padding: 1px 25px 30px;
+  margin: 0 auto 10px;
+  margin-top: 1%;
+  /* shadows and rounded borders */
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+.logo-img-card {
+  width: 320px;
+  height: 80px;
+  margin: 0 auto 10px;
+  display: block;
+  border-radius: 0px;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+}
+
+.reauth-email {
+  display: block;
+  color: #404040;
+  line-height: 2;
+  margin-bottom: 10px;
+  font-size: 14px;
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+%inputIndentation {
+  direction: ltr;
+  height: 44px;
+  font-size: 16px;
+  width: 100%;
+  display: block;
+  border-radius: 5px;
+  z-index: 1;
+  position: relative;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.form-signin {
+  input[type="email"] {
+    @extend %inputIndentation;
+  }
+  input[type="password"] {
+    @extend %inputIndentation;
+  }
+  input[type="text"] {
+    @extend %inputIndentation;
+  }
+  button {
+    @extend %inputIndentation;
+  }
+}
+%formFocusProperty {
+  outline: none !important;
+  border: 1px solid #404040;
+  border-color: #404040;
+  box-shadow: 0 0 10px #404040;
+}
+input:focus {
+  @extend %formFocusProperty;
+}
+
+.btn.btn-signin {
+  /*background-color: #4d90fe; */
+  background-color: $btnColor;
+  width: 100%;
+  /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+}
+.btn-signup {
+  /*background-color: #4d90fe; */
+  background-color: $btnColor;
+  /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+  width: 320px;
+  font-weight: 700;
+  font-size: 14px;
+  height: 40px;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 5px;
+  border: none;
+  -o-transition: all 0.218s;
+  -moz-transition: all 0.218s;
+  -webkit-transition: all 0.218s;
+  transition: all 0.218s;
+}
+
+.btn.btn-signin:hover,
+.btn.btn-signup:hover,
+.btn.btn-signin:focus,
+.btn.btn-signup:focus {
+  background-color: $btnHover;
+  color: #000;
+  @extend %formFocusProperty;
+}
+
+// .btn.btn-signup:hover,
+// .btn.btn-signup:active,
+// .btn.btn-signup:focus {
+//   background-color: rgb(90, 200, 255);
+// }
+
+.forgot-password {
+  color: rgb(104, 145, 162);
+  float: right;
+}
+
+.forgot-password:hover,
+.forgot-password:active,
+.forgot-password:focus {
+  color: $btnHover;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.err_msg {
+  color: red;
+}
+
+#registerdiv {
+  font-family: "myriad-pro", sans-serif;
+  color: #ffffff;
+  text-align: center;
+}

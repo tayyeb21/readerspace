@@ -1,0 +1,74 @@
+{% extends 'headerFooterLayout.html' %} {% block title %} {{result.title}} {% endblock %} {% block section %}
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <div class="container-fliud">
+        <div class="row">
+          <div class="col-2"></div>
+          <div class="col-8">
+            <div class="book-details">
+              <h3 class="book-title">{{ result.title }}</h3>
+              <p class="text-secondary">by {{result.authorname}}</p>
+              <div class="ratings">
+                {% for n in range(1,6) %} {% if rating %} {% if rating > n %}
+                <i class="fas fa-star active"></i>
+                {% else %}
+                <i class="fas fa-star"></i>
+                {% endif %} {% endif %} {% endfor %}
+                <span class="text-muted">({{rating}})</span>
+              </div>
+              <p class="book-description">{{result.description}}</p>
+              <p class="vote">
+                <strong>({{ ratingCount }})</strong> of users rated this book <i class="float-right text-muted" style="margin-right: 15px"><sub>ratings from goodreads</sub></i>
+              </p>
+              <ul>
+                <li><i class="text-secondary">Year: {{result.year}}</i></li>
+                <li><i class="text-secondary">ISBN: {{result.isbn}}</i></li>
+              </ul>
+              <hr />
+              {%- if result.ratings -%}
+              <h6>Your Ratings</h6>
+              <div class="ratings">
+                {%- for n in range(1,6) -%} {%- if result.ratings -%} {%- if result.ratings > n -%}
+                <i class="fas fa-star active"></i>
+                {%- else -%}
+                <i class="fas fa-star"></i>
+                {% endif %} {% endif %} {% endfor %}
+              </div>
+              <h6>Your Review:</h6>
+              <p>{{ result.review }}</p>
+              {% else %}
+              <p>Please Review this book</p>
+              <form action="{{ url_for('bookDetail',isbn=result.isbn) }}" method="POST" class="review-form">
+                <div class="stars form-group">
+                  <input class="star star-5 form-control" id="rating-5" type="radio" name="rating" value="5" required />
+                  <label class="star star-5" for="rating-5"></label>
+                  <input class="star star-4 form-control" id="rating-4" type="radio" name="rating" value="4" />
+                  <label class="star star-4" for="rating-4"></label>
+                  <input class="star star-3 form-control" id="rating-3" type="radio" name="rating" value="3" />
+                  <label class="star star-3" for="rating-3"></label>
+                  <input class="star star-2 form-control" id="rating-2" type="radio" name="rating" value="2" />
+                  <label class="star star-2" for="rating-2"></label>
+                  <input class="star star-1 form-control" id="rating-1" type="radio" name="rating" value="1" />
+                  <label class="star star-1" for="rating-1"></label>
+                </div>
+                <div class="form-group">
+                  <label for="comment">Enter Comments</label>
+                  <textarea id="comment" name="comment" class="form-control" rows="5"></textarea>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-submit">Submit</button>
+                </div>
+              </form>
+
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
