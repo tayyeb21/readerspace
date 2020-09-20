@@ -25,10 +25,47 @@ def apiCallReview(isbn):
         raise Exception("Error! API call unsuccessful")
     else: 
         return apiRes.json()
-def maxPageVal(key=""):
+
+def bookQueries(page = 1, key = "", filter_by="all"):
+    if page == 1:
+            limitCount  = 10
+            limitOffset = 0
+    else: 
+        limitCount  = 10
+        limitOffset = (page-1) * 10
+
+    if key == "":
+        if filter_by == "title":
+            res = db.execute("SELECT title, isbn, authorname, year from books ORDER BY title LIMIT :limitCount OFFSET :limitOffset",{'limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+        elif filter_by == "author":
+            res = db.execute("SELECT title, isbn, authorname, year from books ORDER BY authorname LIMIT :limitCount OFFSET :limitOffset",{'limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+        elif filter_by == "year":
+            res = db.execute("SELECT title, isbn, authorname, year from books ORDER BY year LIMIT :limitCount OFFSET :limitOffset",{'limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+        else:
+            res = db.execute("SELECT title, isbn, authorname, year from books LIMIT :limitCount OFFSET :limitOffset",{'limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+    else:
+        if filter_by == "title":
+            res = db.execute("SELECT title, isbn, authorname, year from books WHERE title LIKE :key ORDER BY title LIMIT :limitCount OFFSET :limitOffset",{"key":'%'+key+'%','limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+        elif filter_by == "author":
+            res = db.execute("SELECT title, isbn, authorname, year from books WHERE authorname LIKE :key ORDER BY authorname LIMIT :limitCount OFFSET :limitOffset",{"key":'%'+key+'%','limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+        elif filter_by == "year":
+            res = db.execute("SELECT title, isbn, authorname, year from books WHERE year LIKE :key ORDER BY year LIMIT :limitCount OFFSET :limitOffset",{"key":'%'+key+'%','limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+        else:
+            res = db.execute("SELECT title, isbn, authorname, year from books WHERE title LIKE :key OR isbn LIKE :key OR authorname LIKE :key LIMIT :limitCount OFFSET :limitOffset",{"key":'%'+key+'%','limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+        
+    return res
+
+def maxPageVal(key="", filter_by = "all"):
     max_page = 0
     if key != "":
-            counts = db.execute("SELECT count(*) as count_books from books WHERE title LIKE :key OR isbn LIKE :key OR authorname LIKE :key" , {"key":'%'+key+'%'})
+            if filter_by == "title":
+                counts = db.execute("SELECT count(*) as count_books from books WHERE title LIKE :key",{"key":'%'+key+'%'})
+            elif filter_by == "author":
+                counts = db.execute("SELECT count(*) as count_books from books WHERE authorname LIKE :key",{"key":'%'+key+'%'})
+            elif filter_by == "year":
+                counts = db.execute("SELECT count(*) as count_books from books WHERE year LIKE :key ",{"key":'%'+key+'%'})
+            else:
+                counts = db.execute("SELECT count(*) as count_books from books WHERE title LIKE :key OR isbn LIKE :key OR authorname LIKE :key" , {"key":'%'+key+'%'})
             count = list(counts)[0][0]
             print(count)
             max_page = count // 10
@@ -95,9 +132,19 @@ def mhp():
     if chk:
         if request.method == "POST":
             key = request.form.get('bookSearch')
-            res = db.execute("SELECT title, isbn, authorname, year from books WHERE title LIKE :key OR isbn LIKE :key OR authorname LIKE :key LIMIT 5" , {"key":'%'+key+'%'}).fetchall()
+            filter_input = request.form.get("filter")
+            print(f"filter = {filter_input}")
+            if(filter_input != "all"):
+                if filter_input == "title":
+                    res = db.execute(f"SELECT title, isbn, authorname, year from books WHERE title LIKE :key LIMIT 5" , {"columnName": filter_input, "key":'%'+key+'%'}).fetchall()
+                elif filter_input == "author":
+                    res = db.execute(f"SELECT title, isbn, authorname, year from books WHERE authorname LIKE :key LIMIT 5" , {"columnName": filter_input, "key":'%'+key+'%'}).fetchall()
+                else:
+                    res = db.execute(f"SELECT title, isbn, authorname, year from books WHERE isbn LIKE :key LIMIT 5" , {"columnName": filter_input, "key":'%'+key+'%'}).fetchall()
+            else:
+                res = db.execute("SELECT title, isbn, authorname, year from books WHERE title LIKE :key OR isbn LIKE :key OR authorname LIKE :key LIMIT 5" , {"key":'%'+key+'%'}).fetchall()
             if res != []:
-                return render_template("myMhp.html",results=res,userResponse=key)
+                return render_template("myMhp.html",results=res,userResponse=key,filter=filter_input)
             else:
                 return render_template("myMHP.html",noresult="No books found Please check title, author name or check ISBN number and Try Again!")
         if request.method == "GET":
@@ -117,9 +164,12 @@ def books(page=1,key=""):
         else: 
             limitCount  = 10
             limitOffset = (page-1) * 10
+
         if request.method == "POST":
             key = request.form.get("bookSearch")
-            res = db.execute("SELECT title, isbn, authorname, year from books WHERE title LIKE :key OR isbn LIKE :key OR authorname LIKE :key LIMIT :limitCount OFFSET :limitOffset" , {"key":'%'+key+'%','limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
+            filter_input = request.form.get("filter", "all")
+            print(f"filter_input = {filter_input}") 
+            res = bookQueries(page, key, filter_input)
             
             if res != []:
                 averageRating = []
@@ -134,16 +184,13 @@ def books(page=1,key=""):
                     averageRating.append(avgRate)
                     ratingsCount.append(ratecnt)
                 results = zip(res,averageRating,ratingsCount)
-                return render_template("books.html", results=results, userResponse=key, page=page, max_page = maxPageVal(key))
+                return render_template("books.html", results=results, userResponse=key, page=page, max_page = maxPageVal(key, filter_input), filter = filter_input)
             else:
                 return render_template("books.html",noresult="No books found Please check title, author name or check ISBN number and Try Again!")
         else:
-            if key == "":
-                res = db.execute("SELECT title, isbn, authorname, year from books LIMIT :limitCount OFFSET :limitOffset",{'limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
-                max_page = maxPageVal()
-            else: 
-                res = db.execute("SELECT title, isbn, authorname, year from books WHERE title LIKE :key OR isbn LIKE :key OR authorname LIKE :key LIMIT :limitCount OFFSET :limitOffset" , {"key":'%'+key+'%','limitOffset':limitOffset, 'limitCount':limitCount}).fetchall()
-                max_page = maxPageVal(key)
+            filter_by = request.args.get("filter", "all")
+            res = bookQueries(page, key, filter_by)
+            max_page = maxPageVal(key, filter_by)
             if res != []:
                 averageRating = []
                 ratingsCount = []
@@ -159,7 +206,7 @@ def books(page=1,key=""):
                     
                 results = zip(res,averageRating,ratingsCount)
                 
-                return render_template("books.html", results=results, userResponse=key, page=page, max_page=max_page)
+                return render_template("books.html", results=results, userResponse=key, page=page, max_page=max_page, filter=filter_by)
             else:
                 return render_template("books.html",noresult="No books found Please check title, author name or check ISBN number and Try Again!")
     else:
@@ -191,8 +238,11 @@ def bookDetail(isbn):
                 print(request.form.get("rating"))
                 rating = int(request.form.get("rating"))
                 print(f"userId={session['userId']}")
-                db.execute("INSERT INTO userreview(user_id, book_id, ratings, review)VALUES(:userId, :bookId, :rating, :comment)",{'userId':session["userId"],'bookId':res.id,'rating':rating,'comment':comment})
-                db.commit()
+                isReviewed = db.execute("SELECT book_id, user_id from userreview WHERE user_id = :userId AND book_id = :bookId",{'userId':session["userId"],'bookId':res.id}).fetchone()
+                print(f"isreviwed={isReviewed}")
+                if isReviewed is None:
+                    db.execute("INSERT INTO userreview(user_id, book_id, ratings, review)VALUES(:userId, :bookId, :rating, :comment)",{'userId':session["userId"],'bookId':res.id,'rating':rating,'comment':comment})
+                    db.commit()
                 row = db.execute("SELECT bk.title, bk.description, bk.isbn, bk.authorname, bk.year, ur.ratings, ur.review FROM books bk LEFT JOIN userreview ur ON bk.id = ur.book_id WHERE bk.isbn = :isbn AND ur.user_id = :userId",{'isbn':isbn,'userId':session["userId"]}).fetchone()
                 print(row)
                 return render_template("bookDetail.html", result = row, rating=averageRating, ratingCount=ratingCount)
