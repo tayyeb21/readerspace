@@ -170,9 +170,13 @@ body {
   text-align: center;
 }
 
+.table-select td a {
+  color: orange;
+}
+
 .table-select:hover,
 .table-select:focus {
-  background: #abbaab;
+  background: #e7e7e7;
 }
 
 /* books stylesheet */
@@ -335,6 +339,11 @@ label.star:hover ~ label.star:before {
 label.star:before {
   content: "";
   font-family: FontAwesome;
+}
+
+/** Utility styles*/
+a.text-orange {
+  color: orange;
 }
 
 @media screen and (max-width: 768px) {

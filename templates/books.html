@@ -1,98 +1,127 @@
-{% extends 'headerFooterLayout.html' %} {% block title %} Books {% endblock %} {% block section %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <div class="card mt-3">
-        <div class="card-body">
-          <h3>Search Books:</h3>
-          <form action="{{ url_for('books') }}" method="post" autocomplete="off">
-            <div class="search-bar">
-              <input class="search-input" type="text" id="bookSearch" name="bookSearch" placeholder="Search..." autofocus />
-              <button type="submit" class="btn search-btn"><i class="fas fa-search"></i></button>
-            </div>
-            <div class="form-group mx-2 mt-2">
-              <input type="radio" name="category" id="all" checked />
-              <label for="all">All</label>
-              <input type="radio" name="category" id="title" />
-              <label for="title">Title</label>
-              <input type="radio" name="category" id="author" />
-              <label for="author">Author</label>
-              <input type="radio" name="category" id="isbn" />
-              <label for="isbn">isbn</label>
-            </div>
-          </form>
+{% extends 'headerFooterLayout.html' %} 
+{% block title %} 
+Books 
+{% endblock %} 
+{% block section %}
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="card mt-3">
+          <div class="card-body">
+            <h3>Search Books:</h3>
+            <form action="{{ url_for('books') }}" method="post" autocomplete="off">
+              <div class="search-bar">
+                <input class="search-input" type="text" id="bookSearch" name="bookSearch" placeholder="Search..." autofocus />
+                <button type="submit" class="btn search-btn"><i class="fas fa-search"></i></button>
+              </div>
+              <div class="form-group mt-2 mx-3">
+                  <input type="radio" name="filter" id="all" value="all"  checked/>
+                  <label for="all">All</label>
+                  <input type="radio" name="filter" id="title" value="title" />
+                  <label for="title">Title</label>
+                  <input type="radio" name="filter" id="author" value="author" />
+                  <label for="author">Author</label>
+                  <input type="radio" name="filter" id="isbn" value="isbn" />
+                  <label for="isbn">isbn</label>
+                </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  {{noresult}} {% if results %} {% for result, rating, ratingCount in results %}
-  <div class="row">
-    <!-- <div class="col-1"></div> -->
-    <div class="col-lg-12 col-md-12 col-sm-12">
-      <div class="book-list">
-        <div class="row">
-          <div class="col-xs-12 col-md-12 col-lg-12">
-            <div class="section-box">
-              <legend>
-                <a href=" {{ url_for('bookDetail',isbn=result.isbn) }} " class="book-title">{{ result.title }}</a>
-              </legend>
-              <p>
-                <a href="{{ url_for('bookDetail',isbn=result.isbn) }}">by {{ result.authorname }} in year {{ result.year }}</a>
-              </p>
-            </div>
-            <hr />
-            <div class="row rating-desc">
-              <div class="col-md-12 ratings">
-                {% for n in range(1,6) %} {% if rating %} {% if rating >= n %}
-                <i class="fas fa-star active"></i>
-                {% else %}
-                <i class="fas fa-star"></i>
-                {% endif %} {% endif %} {% endfor %}<span class="text-muted">({{rating}})</span> ({{ ratingCount -}})<sup class="text-secondary">Total ratings</sup>
-                <i class="float-right text-muted" style="margin-right: 2%"><sub>ratings from goodreads</sub></i>
+    {%- if noresult %}  
+    <legend class="text-white text-center mt-5">
+      {{noresult}}
+    </legend> 
+    {%- endif %}
+    {%- if results %} 
+    {%- for result, rating, ratingCount in results %}
+    <div class="row">
+      <!-- <div class="col-1"></div> -->
+      <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="book-list">
+          <div class="row">
+            <div class="col-xs-12 col-md-12 col-lg-12">
+              <div class="section-box">
+                <legend>
+                  <a href=" {{ url_for('bookDetail',isbn=result.isbn) }} " class="book-title text-dark  ">{{ result.title }}</a>
+                </legend>
+                <p>
+                  <a href="{{ url_for('bookDetail',isbn=result.isbn) }}" class="text-dark ">by {{ result.authorname }} in year {{ result.year }}</a>
+                </p>
+              </div>
+              <hr />
+              <div class="row rating-desc">
+                <div class="col-md-12 ratings">
+                  {%- for n in range(1,6) %} 
+                    {%- if rating %} 
+                      {%- if rating >= n %}
+                      <i class="fas fa-star active"></i>
+                      {%- else %}
+                      <i class="fas fa-star"></i>
+                      {%- endif %} 
+                    {%- endif %} 
+                  {%- endfor %}<span class="text-muted">({{rating}})</span> ({{ ratingCount -}})<sup class="text-secondary">Total ratings</sup>
+                  <i class="float-right text-muted" style="margin-right: 2%"><sub>ratings from goodreads</sub></i>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <!-- <div class="col-1"></div> -->
     </div>
-    <!-- <div class="col-1"></div> -->
-  </div>
-  {% endfor %}
-  <div class="row">
-    <div class="col-2"></div>
-    <div class="col-lg-8 col-md-8 col-sm-8">
-      <ul class="pagination-custom text-center">
-        {% if page == 1 %}
-        <li class="pag-link disabled"><i class="fa fa-angle-double-left"></i></li>
-        {% else %} {% if userResponse %}
-        <li class="pag-link">
-          <a href="{{ url_for('books',key=userResponse,page=page-1) }}"><i class="fa fa-angle-double-left"></i></a>
-        </li>
-        {% else %}
-        <li class="pag-link">
-          <a href="{{ url_for('books',page=page-1) }}"><i class="fa fa-angle-double-left"></i></a>
-        </li>
-        {% endif %} {% endif %} {% set page_end = page+5 if (page+5) < max_page else max_page+1 %} {% for n in range(page, page_end) %} {% if page == n %}
-        <li class="pag-link current"><span>{{page}}</span></li>
-        {% else %} {% if userResponse %}
-        <li class="pag-link"><a href="{{ url_for('books',key=userResponse,page=n) }}">{{n}}</a></li>
-        {% else %}
-        <li class="pag-link"><a href="{{ url_for('books',page=n) }}">{{n}}</a></li>
-        {% endif %} {% endif %} {% endfor %} {%if page == max_page %}
-        <li class="pag-link disabled"><i class="fa fa-angle-double-right"></i></li>
-        {% else %} {% if userResponse %}
-        <li class="pag-link" title="Last Page">
-          <a href="{{ url_for('books',key=userResponse,page=max_page) }}"><i class="fa fa-angle-double-right"></i></a>
-        </li>
-        {% else %}
-        <li class="pag-link" title="Last Page">
-          <a href="{{ url_for('books',page=max_page) }}"><i class="fa fa-angle-double-right"></i></a>
-        </li>
-        {% endif %} {% endif %}
-      </ul>
+    {%- endfor %}
+    <div class="row">
+      <div class="col-2"></div>
+      <div class="col-lg-8 col-md-8 col-sm-8">
+        <ul class="pagination-custom text-center">
+        {%- if max_page > 0 %}
+            {%- if page == 1 %}
+              <li class="pag-link disabled"><i class="fa fa-angle-double-left"></i></li>
+            {%- else %} 
+              {%- if userResponse %}
+                <li class="pag-link">
+                <a href="{{ url_for('books',key=userResponse,page=page-1,filter=filter) }}"><i class="fa fa-angle-double-left"></i></a>
+              </li>
+              {%- else %}
+                <li class="pag-link">
+                  <a href="{{ url_for('books',page=page-1) }}"><i class="fa fa-angle-double-left"></i></a>
+                </li>
+              {%- endif %} 
+            {%- endif %} 
+            {%- set page_end = page+5 if (page+5) < max_page else max_page+1 %} 
+            {%- for n in range(page, page_end) %} 
+              {%- if page == n %}
+                <li class="pag-link current"><span>{{page}}</span></li>
+              {%- else %} 
+                {%- if userResponse %}
+                  <li class="pag-link"><a href="{{ url_for('books',key=userResponse,page=n,filter=filter) }}">{{n}}</a></li>
+                {%- else %}
+                  <li class="pag-link"><a href="{{ url_for('books',page=n) }}">{{n}}</a></li>
+                {%- endif %} 
+              {%- endif %} 
+            {%- endfor %} 
+              {%- if page == max_page %}
+                <li class="pag-link disabled"><i class="fa fa-angle-double-right"></i></li>
+              {%- else %} 
+                {%- if userResponse %}
+                  <li class="pag-link" title="Last Page">
+                    <a href="{{ url_for('books',key=userResponse,page=max_page,filter=filter) }}"><i class="fa fa-angle-double-right"></i></a>
+                  </li>
+                {%- else %}
+                  <li class="pag-link" title="Last Page">
+                    <a href="{{ url_for('books',page=max_page) }}"><i class="fa fa-angle-double-right"></i></a>
+                  </li>
+                {%- endif %} 
+          
+            {%- endif %}
+          {%- endif %}
+        </ul>
+      </div>
+
+      <div class="col-2"></div>
     </div>
-    <div class="col-2"></div>
+    {%- endif %}
   </div>
-  {% endif %}
-</div>
-{% endblock %}
+{%- endblock %}

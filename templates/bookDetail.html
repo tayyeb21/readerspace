@@ -10,11 +10,15 @@
               <h3 class="book-title">{{ result.title }}</h3>
               <p class="text-secondary">by {{result.authorname}}</p>
               <div class="ratings">
-                {% for n in range(1,6) %} {% if rating %} {% if rating > n %}
-                <i class="fas fa-star active"></i>
-                {% else %}
-                <i class="fas fa-star"></i>
-                {% endif %} {% endif %} {% endfor %}
+                {% for n in range(1,6) %} 
+                  {% if rating %} 
+                    {% if rating >= n %}
+                    <i class="fas fa-star active"></i>
+                    {% else %}
+                    <i class="fas fa-star"></i>
+                    {% endif %} 
+                  {% endif %} 
+                {% endfor %}
                 <span class="text-muted">({{rating}})</span>
               </div>
               <p class="book-description">{{result.description}}</p>
@@ -29,11 +33,15 @@
               {%- if result.ratings -%}
               <h6>Your Ratings</h6>
               <div class="ratings">
-                {%- for n in range(1,6) -%} {%- if result.ratings -%} {%- if result.ratings > n -%}
-                <i class="fas fa-star active"></i>
-                {%- else -%}
-                <i class="fas fa-star"></i>
-                {% endif %} {% endif %} {% endfor %}
+                {%- for n in range(1,6) -%} 
+                  {%- if result.ratings -%} 
+                    {%- if result.ratings >= n -%}
+                    <i class="fas fa-star active"></i>
+                    {%- else -%}
+                    <i class="fas fa-star"></i>
+                    {% endif %} 
+                  {% endif %} 
+                {% endfor %}
               </div>
               <h6>Your Review:</h6>
               <p>{{ result.review }}</p>

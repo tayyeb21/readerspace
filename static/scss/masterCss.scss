@@ -155,7 +155,7 @@ body {
 }
 .table-select:hover,
 .table-select:focus {
-  background: #abbaab;
+  background: #e7e7e7;
 }
 
 /* books stylesheet */
@@ -322,6 +322,13 @@ label.star:before {
   content: "\f006";
   font-family: FontAwesome;
 }
+
+/** Utility styles*/
+
+a.text-orange{
+  color: $btnColor;
+}
+
 .review-form {
   .btn-submit {
     @extend %buttonProperties;
