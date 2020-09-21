@@ -5,8 +5,8 @@
 .pag-link.current > span,
 .pag-link:active > a,
 .pag-link:hover > a,
-.pag-link:focus > a, .search-bar:hover .search-btn, .nav-search button:focus,
-.nav-search button:hover, .btn:focus, .btn:hover {
+.pag-link:focus > a, .search-bar:hover .search-btn, .nav-search .search-btn:focus,
+.nav-search .search-btn:hover {
   color: white;
   outline: none !important;
   border: 1px solid #2c3e50;
@@ -18,8 +18,8 @@
 .pag-link.current > span,
 .pag-link:active > a,
 .pag-link:hover > a,
-.pag-link:focus > a, .search-bar:hover .search-btn, .nav-search button:focus,
-.nav-search button:hover, .btn:focus, .btn:hover {
+.pag-link:focus > a, .search-bar:hover .search-btn, .nav-search .search-btn:focus,
+.nav-search .search-btn:hover {
   border: 1px solid #ff9900;
   background: #fff;
   color: orange;
@@ -54,7 +54,7 @@ body {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.review-form .btn-submit {
+.review-form btn-submit {
   color: black;
   background-color: orange;
 }
@@ -327,6 +327,18 @@ a.text-orange {
   color: orange;
 }
 
+/* profile css*/
+.profile-divider {
+  height: 3px;
+  background: #ADA996;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+}
+
+/* media queries*/
 @media screen and (max-width: 768px) {
   .search-bar {
     width: 100%;

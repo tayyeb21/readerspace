@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/masterCss.css')}}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='scss/masterCss.css')}}" />
     <link rel="icon" href="{{ url_for('static', filename='logo/logo1.png') }}">
     <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" /> -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
@@ -36,8 +36,8 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle px-3" href="" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="fas fa-account"></i><i class="fas fa-user"></i> Account </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <a class="dropdown-item" href="#"> <i class="fas fa-user"></i> My Account</a>
-                  <a class="dropdown-item" href="{{ url_for('review') }}"><i class="fas fa-star-half-alt"></i> My Reviews</a>
+                  <!-- <a class="dropdown-item" href="#" data-toggle="modal" data-target="#showProfile"> <i class="fas fa-user"></i> My Account</a> -->
+                  <a class="dropdown-item" href="{{ url_for('profile') }}"><i class="fas fa-user"></i> My Profile</a>
                   <div class="dropdown-divider"></div>
                   <a class="dropdown-item" href="{{ url_for('logout') }}"><i class="fas fa-power-off"></i> Log Out</a>
                 </div>

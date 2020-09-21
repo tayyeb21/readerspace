@@ -1,0 +1,110 @@
+{% extends 'headerFooterLayout.html' %} {% block title %} My Reviews {% endblock %} {% block section %}
+<div class="container mt-3">
+  <div class="card">
+    <div class="card-body">
+      <h3>{{user.firstname}} {{user.middlename}} {{user.lastname}}</h3>
+      <p>{{user.email}}</p>
+      <button id="editProfile" class="btn btn-outline-warning" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
+      <button id="changePassword" class="btn btn-outline-warning" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+    </div>
+  </div>
+  <hr class="profile-divider" />
+  {% if noresult %}
+  <legend class="text-white text-center">{{noresult}} <a href="{{ url_for('books') }}" class="text-warning">browse books </a></legend>
+  {% endif %} {% if results %}
+  <h2 class="text-white">Your Reviews</h2>
+  {% for result in results %}
+  <div class="row">
+    <!-- <div class="col-2"></div> -->
+    <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="book-list">
+        <div class="row">
+          <div class="col-xs-12 col-md-12 col-lg-12">
+            <div class="section-box">
+              <legend>
+                <a href=" {{ url_for('bookDetail',isbn=result.isbn) }} " class="book-title text-dark">{{ result.title }}</a>
+              </legend>
+              <p>
+                <a href="{{ url_for('bookDetail',isbn=result.isbn) }}" class="text-dark">by {{ result.authorname }} in year {{ result.year }}</a>
+              </p>
+            </div>
+            <hr />
+            <div class="row rating-desc">
+              <div class="col-md-12 ratings">
+                {% for n in range(1,6) %} {%- if result.ratings %} {%- if result.ratings >= n %}
+                <i class="fas fa-star active"></i>
+                {%- else %}
+                <i class="fas fa-star"></i>
+                {% endif %} {% endif %} {% endfor %}<i class="float-right text-muted" style="margin-right: 2%"><sub>your ratings</sub></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="col-2"></div> -->
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div class="modal" id="editProfileModal">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h3>Edit Profile</h3>
+                  <button class="close" data-dismiss="modal">&times;</button>
+              </div>
+              <div class="modal-body">
+                  <form action="" method="post">
+                      <div class="form-group">
+                          <label for="firstName">Firstname</label>
+                          <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" value="{{user.firstname}}" required="required" autofocus="autofocus" />
+                      </div>
+                      <div class="form-group">
+                          <label for="middleName">Middlename</label>
+                          <input type="text" id="middleName" name="middleName" class="form-control" placeholder="Middle Name(optional)" value="{{user.middlename}}" />
+                      </div>
+                      <div class="form-group">
+                          <label for="lastName">lastname</label>
+                          <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required="required" value="{{user.lastname}}" />
+                      </div>
+                      <div class="form-group">
+                          <label for="email">Email</label>
+                          <input type="email" name="email" id="email" class="form-control" value="{{user.email}}">
+                      </div>
+                      <button type="submit" class="btn btn-warning">Update</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="modal" id="changePasswordModal">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h3>Change Password</h3>
+              </div>
+              <div class="modal-body">
+                  <form action="" method="post">
+                      {%- if message %}
+                        <p id="errorMessage" class="text-danger">{{message}}</p>
+                      {% endif %}
+                      <div class="form-group">
+                          <label for="oldpassword">Old Password</label>
+                          <input type="password" id="oldpassword" name="oldpassword" class="form-control" placeholder="Old Password" required="required" autofocus="autofocus" />
+                      </div>
+                      <div class="form-group">
+                          <label for="newpassword">New Password</label>
+                          <input type="password" id="newpassword" name="newpassword" class="form-control" placeholder="New Password" required="required" />
+                      </div>
+                      <div class="form-group">
+                          <label for="confirmpassword">Confirm Password</label>
+                          <input type="password" id="confirmpassword" name="confirmpassword" class="form-control" placeholder="Confirm Password" required="required" />
+                      </div>
+                      <button type="submit" class="btn btn-warning">Update</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

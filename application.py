@@ -112,11 +112,11 @@ def index():
 @app.route("/signup", methods=["GET","POST"])
 def signup():
     if request.method == "POST":
-        firstName = request.form.get("firstName")
-        middleName = request.form.get("middleName")
-        lastName = request.form.get("lastName")
-        email = request.form.get("email")
-        password = request.form.get("pswd")
+        firstName  = request.form.get("firstName").capitalize()
+        middleName = request.form.get("middleName").capitalize()
+        lastName   = request.form.get("lastName").capitalize()
+        email      = request.form.get("email")
+        password   = request.form.get("password")
         res = db.execute("INSERT INTO users (firstname,middlename,lastname,email,password) VALUES (:firstName,:middleName,:lastName,:email,:password)", {'firstName':firstName,'middleName':middleName,'lastName':lastName,'email':email,'password':password} )
         print(type(res))
         print(f"res = {res}")
@@ -212,17 +212,24 @@ def books(page=1,key=""):
     else:
         return redirect(url_for('logout'))
 
-@app.route("/myReview")
-def review():
+@app.route("/myProfile")
+def profile():
     chk = sessionChecker()
     if chk:
+        user = db.execute("SELECT * FROM users WHERE id = :id", {"id": session["userId"]}).fetchone()
         res = db.execute("SELECT bk.title, bk.isbn, bk.authorname, bk.year, ur.ratings, ur.review FROM books bk LEFT JOIN userreview ur ON bk.id = ur.book_id WHERE ur.user_id = :userId",{'userId':session["userId"]}).fetchall()
         if res != []:        
-            return render_template("review.html", results=res)
+            return render_template("profile.html", results=res, user=user)
         else:
-            return render_template("review.html", noresult="No reviewed books please give review")
+            return render_template("profile.html", noresult="No reviewed books please give review", user=user)
     else:
         return redirect(url_for('logout'))
+
+@app.route("/editProfile", methods=["POST"])
+def editProfile():
+    pass
+    # request.form.get("")
+    # return render_template("profile.html", user=res)
 
 @app.route("/bookdetail/<string:isbn>", methods=["GET","POST"])
 def bookDetail(isbn):
@@ -248,10 +255,17 @@ def bookDetail(isbn):
                 return render_template("bookDetail.html", result = row, rating=averageRating, ratingCount=ratingCount)
 
             else:
-                row = db.execute("SELECT bk.title, bk.description, bk.isbn, bk.authorname, bk.year, ur.ratings, ur.review FROM books bk LEFT JOIN userreview ur ON bk.id = ur.book_id WHERE bk.isbn = :isbn AND ur.user_id = :userId",{'isbn':isbn,'userId':session["userId"]}).fetchone()
-                print(row)
-                if row is not None:
-                    return render_template("bookDetail.html", result = row, rating=averageRating, ratingCount=ratingCount)
+                reviews = db.execute("SELECT us.id, us.firstname, us.lastname, ur.ratings, ur.review FROM userreview ur INNER JOIN users us ON ur.user_id = us.id WHERE book_id = :book_id",{'book_id':res.id}).fetchall()
+                print(reviews)
+                if reviews != []:
+                    for index, userReview in enumerate(reviews):
+                        if(userReview[0] == session["userId"]):
+                            # print(index)
+                            # print(reviews)
+                            # reviews.pop(index)
+                            # print(reviews)
+                            return render_template("bookDetail.html", result = res, reviews = reviews, user = userReview,  rating=averageRating, ratingCount=ratingCount)
+                    return render_template("bookDetail.html", result = res, reviews = reviews, rating=averageRating, ratingCount=ratingCount)
                 else:
                     return render_template("bookDetail.html", result = res, rating=averageRating, ratingCount=ratingCount)
         else:
@@ -264,19 +278,28 @@ def logout():
     session.clear()
     return render_template('signin.html',message="Please Login to Continue")
 
+def serializeReview(obj):
+    return {
+        "username": obj[0] + obj[1],
+        "ratings" : obj[2],
+        "review"  : obj[3]
+    }
 
 @app.route("/api/<string:isbn>")
 def api(isbn):
-    res = db.execute("SELECT id, title, isbn, authorname, year from books WHERE isbn = :isbn",{'isbn':isbn}).fetchone()
+    res = db.execute("SELECT id, title, description, isbn, authorname, year from books WHERE isbn = :isbn",{'isbn':isbn}).fetchone()
     if res is None:
         return jsonify({"error": "book is not available in our database"}), 404
     else:
         rate = db.execute("SELECT COUNT(ratings) as ratingcount, COUNT(review) as review, SUM(ratings) as sumrating FROM userreview WHERE book_id = :bookId",{'bookId':res.id}).fetchone()
         if rate.sumrating is not None and rate.ratingcount != 0:
-            avgRate = rate.sumrating/rate.ratingcount
+            reviews       = db.execute("SELECT us.firstname, us.lastname, ur.ratings, ur.review FROM userreview ur INNER JOIN users us ON ur.user_id = us.id WHERE book_id = :bookId",{'bookId':res.id}).fetchall()
+            allreviews    = [serializeReview(review) for review in reviews ]
+            avgRate       = rate.sumrating/rate.ratingcount
             averageRating = round(avgRate,2)
-            ratingCount = rate.ratingcount
-            reviewCount = rate.review
+            ratingCount   = rate.ratingcount
+            reviewCount   = rate.review
+            
         else:
             averageRating = 0
             ratingCount   = 0
@@ -290,6 +313,7 @@ def api(isbn):
             "year"         : str(res.year),
             "review_count" : str(reviewCount),
             "rating_count" : str(ratingCount),
-            "average_score": str(averageRating)
+            "average_score": str(averageRating),
+            "reviews"      : allreviews
         }) 
 

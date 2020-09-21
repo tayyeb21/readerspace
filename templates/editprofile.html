@@ -1,0 +1,31 @@
+{% extends 'headerFooterLayout.html' %}
+{% block title %}
+My Profile
+{% endblock  %}
+{% block section %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form action="" method="post">
+                            <label for="name"></label>
+                            <div id="name" class="form-row"> 
+                                <div class="col">
+                                    <input type="text" id="firstName" name="firstName"  class="form-control" placeholder="First Name" required="required"  autofocus="autofocus" />
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="middleName" name="middleName"  class="form-control" placeholder="Middle Name(optional)" />
+                                </div>
+                                <div class="col">
+                                    <input type="text" id="lastName" name="lastName"  class="form-control" placeholder="Last Name" required="required" />
+                                </div>
+                            </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock  %}

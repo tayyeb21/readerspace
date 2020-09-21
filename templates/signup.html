@@ -9,7 +9,7 @@
 {% endblock  %}
 {% block section %}
 <div class="container">
-            <img alt="mercado logo"  id="logo-img" src="{{ url_for('static', filename='logo/logo1.png') }}" class="logo-img-card" />
+            <img alt="readerspace logo"  id="logo-img" src="{{ url_for('static', filename='logo/logo1.png') }}" class="logo-img-card" />
             <div class="card card-container">
                 <h2 class='login_title text-center'>Register</h2>
                 <hr />
@@ -21,9 +21,9 @@
                             <div class="col">
                                 <input type="text" id="firstName" name="firstName"  class="login_box" placeholder="First Name" required="required"  autofocus="autofocus" />
                             </div>
-                                <div class="col">
-                            <input type="text" id="middleName" name="middleName"  class="login_box" placeholder="Middle Name(optional)" />
-                                </div>
+                            <div class="col">
+                                <input type="text" id="middleName" name="middleName"  class="login_box" placeholder="Middle Name(optional)" />
+                            </div>
                             <div class="col">
                                 <input type="text" id="lastName" name="lastName"  class="login_box" placeholder="Last Name" required="required" />
                             </div>
@@ -34,15 +34,35 @@
                         <input type="email" id="email" name="email"  class="login_box" placeholder="Your E-mail" required="required" title="Please enter a valid E-mail"  />
 
                         <p class="input_title" >Password <span class="err_msg">*</span></p>
-                        <input type="password" id="pswd" name="pswd" class="login_box" placeholder="Your Password"  required="required" onchange="validatePassword();" />
+                        <input type="password" id="password" name="password" class="login_box" placeholder="Your Password"  required="required" onchange="validatePassword();" />
 
+                        <span class="text-danger" id="password-error"></span>
                         <p class="input_title" >Confirm Password <span class="err_msg">*</span></p>
-                        <input type="password" id="cnfpassword"  class="login_box" placeholder="Confirm Password" required="required" onkeyup="validatePassword();" />
-                        
+                        <input type="password" id="cnfpassword"  class="login_box" placeholder="Confirm Password" required="required" />
+
                         <button type="submit" id="submitbtn" name="submitbtn" class="btn btn-lg btn-signin" >Create Account</button><br />
 
                         <span>Already have an Account? <a href="{{ url_for('index') }}" id="linksignin" class="forgot-password" >Sign In</a></span>                
                         </form><!-- /form -->
                 </div>
             </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    document.querySelector("#submitbtn").onclick = () => {
+                        const firstName = document.querySelector("#firstName");
+                        const lastName = document.querySelector("#lastName");
+                        const email = document.querySelector("#email");
+                        const password = document.querySelector("#password");
+                        const cnfpassword = document.querySelector("#cnfpassword");
+                        if(firstName.value == "" || lastName.value == "" || email.value == "" || password.value == "" || cnfpassword.value == "")
+                            return;
+
+                        if(password.value === cnfpassword.value)
+                            document.querySelector("#signup_frm").submit();
+
+                        document.querySelector("#password-error").innerHTML = "Password mismatch";
+                        return false;
+                    }
+                })
+            </script>
 {% endblock %}
