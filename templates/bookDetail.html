@@ -1,4 +1,9 @@
-{% extends 'headerFooterLayout.html' %} {% block title %} {{result.title}} {% endblock %} {% block section %}
+{% extends 'headerFooterLayout.html' %} 
+{% block title %} {{result.title}} {% endblock %} 
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/bookDetail.js') }}"></script>
+{% endblock  %}
+{% block section %}
 <div class="container">
   <div class="card">
     <div class="card-body">
@@ -21,14 +26,15 @@
               <strong>({{ ratingCount }})</strong> of users rated this book <i class="float-right text-muted" style="margin-right: 15px"><sub>ratings from goodreads</sub></i>
             </p>
             <ul>
-              <li><i class="text-secondary">Year: {{result.year}}</i></li>
-              <li><i class="text-secondary">ISBN: {{result.isbn}}</i></li>
+              <li><i id="year" class="text-secondary">Year: {{result.year}}</i></li>
+              <li><i class="text-secondary">ISBN: <span id="isbn">{{result.isbn}}</span></i></li>
             </ul>
             <hr />
             {%- if user %} 
+            <div id="user-rating">
               {%- if user.ratings -%}
-              <h6>Your Ratings</h6>
-              <div class="ratings">
+              <h6>Your Ratings <button id="editreview" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editReviewModal"><i class="fas fa-pen"></i> edit</button></h6>
+              <div id="user-ratings" class="ratings">
                 {%- for n in range(1,6) -%} {%- if user.ratings >= n -%}
                 <i class="fas fa-star active"></i>
                 {%- else -%}
@@ -36,35 +42,38 @@
                 {% endif %} {% endfor %}
               </div>
               <h6>Your Review:</h6>
-              <p>{{ user.review }}</p>
+              <p id="user-review">{{ user.review }}</p>
               {% endif %} 
+            </div>
             {% else %}
-            <p>Please Review this book</p>
-            <form action="{{ url_for('bookDetail',isbn=result.isbn) }}" method="POST" class="review-form">
-              <div class="stars form-group">
-                <input class="star star-5 form-control" id="rating-5" type="radio" name="rating" value="5" required />
-                <label class="star star-5" for="rating-5"></label>
-                <input class="star star-4 form-control" id="rating-4" type="radio" name="rating" value="4" />
-                <label class="star star-4" for="rating-4"></label>
-                <input class="star star-3 form-control" id="rating-3" type="radio" name="rating" value="3" />
-                <label class="star star-3" for="rating-3"></label>
-                <input class="star star-2 form-control" id="rating-2" type="radio" name="rating" value="2" />
-                <label class="star star-2" for="rating-2"></label>
-                <input class="star star-1 form-control" id="rating-1" type="radio" name="rating" value="1" />
-                <label class="star star-1" for="rating-1"></label>
-              </div>
-              <div class="form-group">
-                <label for="comment">Enter Comments</label>
-                <textarea id="comment" name="comment" class="form-control" rows="2"></textarea>
-              </div>
-              <div class="form-group">
-                <button type="submit" class="btn btn-submit">Submit</button>
-              </div>
-            </form>
+            <div class="review-form">
+              <p>Please Review this book</p>
+              <form action="{{ url_for('bookDetail',isbn=result.isbn) }}" method="POST" class="review-form">
+                <div class="stars form-group">
+                  <input class="star star-5 form-control" id="rating-5" type="radio" name="rating" value="5" required />
+                  <label class="star star-5" for="rating-5"></label>
+                  <input class="star star-4 form-control" id="rating-4" type="radio" name="rating" value="4" />
+                  <label class="star star-4" for="rating-4"></label>
+                  <input class="star star-3 form-control" id="rating-3" type="radio" name="rating" value="3" />
+                  <label class="star star-3" for="rating-3"></label>
+                  <input class="star star-2 form-control" id="rating-2" type="radio" name="rating" value="2" />
+                  <label class="star star-2" for="rating-2"></label>
+                  <input class="star star-1 form-control" id="rating-1" type="radio" name="rating" value="1" />
+                  <label class="star star-1" for="rating-1"></label>
+                </div>
+                <div class="form-group">
+                  <label for="comment">Enter Comments</label>
+                  <textarea id="comment" name="comment" class="form-control" rows="2"></textarea>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-submit">Submit</button>
+                </div>
+              </form>
+            </div>
             {% endif %}
+            <h5>Community Review</h5>
             {%- if reviews %}
             <div class="review-section mx-auto">
-              <h5>Community Review</h5>
               <hr />
                 {%- for review in reviews %}
                   <legend>{{review.firstname}} {{review.lastname}}</legend>
@@ -80,6 +89,8 @@
                   <p>{{review.review}}</p>
                   <hr>
                 {%- endfor %}
+              {%- else %}
+                <strong>No Reviews yet</strong>    
               {%- endif %}
             </div>
           </div>
@@ -89,5 +100,39 @@
     </div>
   </div>
 </div>
-
+<div class="modal" id="editReviewModal">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Edit Review</h3>
+        <button class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p>What makes you change your mind</p>
+        <form action="{{ url_for('updateReview',isbn=result.isbn) }}" method="POST" class="review-form">
+          <div class="stars form-group">
+            <input class="star star-5 form-control" id="rating-5" type="radio" name="edit-rating" value="5" required />
+            <label class="star star-5" for="rating-5"></label>
+            <input class="star star-4 form-control" id="rating-4" type="radio" name="edit-rating" value="4" />
+            <label class="star star-4" for="rating-4"></label>
+            <input class="star star-3 form-control" id="rating-3" type="radio" name="edit-rating" value="3" />
+            <label class="star star-3" for="rating-3"></label>
+            <input class="star star-2 form-control" id="rating-2" type="radio" name="edit-rating" value="2" />
+            <label class="star star-2" for="rating-2"></label>
+            <input class="star star-1 form-control" id="rating-1" type="radio" name="edit-rating" value="1" />
+            <label class="star star-1" for="rating-1"></label>
+            <span id="rating-tooltip" data-toggle="tooltip" title="Please give ratings"></span>
+          </div>
+          <div class="form-group">
+            <label for="edit-review">Edit Review</label>
+            <textarea id="edit-review" name="edit-review" class="form-control" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <button type="submit" id="updatebtn" class="btn btn-submit">Update</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

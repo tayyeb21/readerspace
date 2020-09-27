@@ -54,7 +54,7 @@ body {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.review-form btn-submit {
+.btn-submit {
   color: black;
   background-color: orange;
 }
@@ -330,11 +330,11 @@ a.text-orange {
 /* profile css*/
 .profile-divider {
   height: 3px;
-  background: #ADA996;
+  background: #ada996;
   /* fallback for old browsers */
-  background: -webkit-linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);
+  background: -webkit-linear-gradient(to bottom, #eaeaea, #dbdbdb, #f2f2f2, #ada996);
   /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to bottom, #EAEAEA, #DBDBDB, #F2F2F2, #ADA996);
+  background: linear-gradient(to bottom, #eaeaea, #dbdbdb, #f2f2f2, #ada996);
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 

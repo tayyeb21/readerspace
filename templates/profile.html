@@ -1,9 +1,14 @@
-{% extends 'headerFooterLayout.html' %} {% block title %} My Reviews {% endblock %} {% block section %}
+{% extends 'headerFooterLayout.html' %} 
+{% block title %} My Reviews {% endblock %} 
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+{% endblock  %}
+{% block section %}
 <div class="container mt-3">
   <div class="card">
     <div class="card-body">
-      <h3>{{user.firstname}} {{user.middlename}} {{user.lastname}}</h3>
-      <p>{{user.email}}</p>
+      <h3 id="userfullname">{{user.firstname}} {{user.middlename}} {{user.lastname}}</h3>
+      <p id="useremail">{{user.email}}</p>
       <button id="editProfile" class="btn btn-outline-warning" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
       <button id="changePassword" class="btn btn-outline-warning" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
     </div>
@@ -54,9 +59,10 @@
                   <button class="close" data-dismiss="modal">&times;</button>
               </div>
               <div class="modal-body">
-                  <form action="" method="post">
+                <p id="errorMessageProfile" class="text-danger"></p>
+                  <form action="{{ url_for('editProfile') }}" method="post">
                       <div class="form-group">
-                          <label for="firstName">Firstname</label>
+                          <label for="firstName">Firstname</label><span class="text-danger">*</span>
                           <input type="text" id="firstName" name="firstName" class="form-control" placeholder="First Name" value="{{user.firstname}}" required="required" autofocus="autofocus" />
                       </div>
                       <div class="form-group">
@@ -64,14 +70,14 @@
                           <input type="text" id="middleName" name="middleName" class="form-control" placeholder="Middle Name(optional)" value="{{user.middlename}}" />
                       </div>
                       <div class="form-group">
-                          <label for="lastName">lastname</label>
+                          <label for="lastName">lastname</label><span class="text-danger">*</span>
                           <input type="text" id="lastName" name="lastName" class="form-control" placeholder="Last Name" required="required" value="{{user.lastname}}" />
                       </div>
                       <div class="form-group">
-                          <label for="email">Email</label>
+                          <label for="email">Email</label><span class="text-danger">*</span>
                           <input type="email" name="email" id="email" class="form-control" value="{{user.email}}">
                       </div>
-                      <button type="submit" class="btn btn-warning">Update</button>
+                      <button type="submit" id="changeprofilebtn" class="btn btn-submit">Update</button>
                   </form>
               </div>
           </div>
@@ -84,27 +90,32 @@
                   <h3>Change Password</h3>
               </div>
               <div class="modal-body">
-                  <form action="" method="post">
-                      {%- if message %}
-                        <p id="errorMessage" class="text-danger">{{message}}</p>
-                      {% endif %}
+                <p id="errorMessagePassword" class="text-danger"></p>
+                  {%- if message %}
+                    {{message}}
+                  {% endif %}
+                </p>
+                  <form action="" method="post" id="changePasswordfrm">
                       <div class="form-group">
-                          <label for="oldpassword">Old Password</label>
+                          <label for="oldpassword">Old Password</label><span class="text-danger">*</span>
                           <input type="password" id="oldpassword" name="oldpassword" class="form-control" placeholder="Old Password" required="required" autofocus="autofocus" />
                       </div>
                       <div class="form-group">
-                          <label for="newpassword">New Password</label>
+                          <label for="newpassword">New Password</label><span class="text-danger">*</span>
                           <input type="password" id="newpassword" name="newpassword" class="form-control" placeholder="New Password" required="required" />
                       </div>
                       <div class="form-group">
-                          <label for="confirmpassword">Confirm Password</label>
+                          <label for="confirmpassword">Confirm Password</label><span class="text-danger">*</span>
                           <input type="password" id="confirmpassword" name="confirmpassword" class="form-control" placeholder="Confirm Password" required="required" />
                       </div>
-                      <button type="submit" class="btn btn-warning">Update</button>
+                      <button id="changepasswordbtn" type="submit" class="btn btn-submit">Update</button>
                   </form>
               </div>
           </div>
       </div>
   </div>
 </div>
+<script>
+   
+</script>
 {% endblock %}

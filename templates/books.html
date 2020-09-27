@@ -11,7 +11,7 @@ Books
             <h3>Search Books:</h3>
             <form action="{{ url_for('books') }}" method="post" autocomplete="off">
               <div class="search-bar">
-                <input class="search-input" type="text" id="bookSearch" name="bookSearch" placeholder="Search..." autofocus />
+                <input class="search-input" type="text" id="bookSearch" name="bookSearch" placeholder="Search..." autofocus required />
                 <button type="submit" class="btn search-btn"><i class="fas fa-search"></i></button>
               </div>
               <div class="form-group mt-2 mx-3">
