@@ -1,0 +1,12 @@
+
+
+The scope of this project is very broad few of them are as follows: 
+
+
+The main purpose of this project is to provide a platform for the readers to help them find the perfect book for there next reading journey. 
+The API from Goodreads makes it a more powerful platform to get to know about the user's opinion on the book by having data like average ratings and total ratings 
+This Project also provides a facility to user for giving there reviews and rating on a particular book. 
+Along with the ratings from Goodreads the user will also be able to see the reviews of other users of the system. 
+The system is fully responsive keeping into the mind of various device compatibility It is a Web-based application so can be accessed by any browser. 
+For the developer community, this system also provides a REST API available for everyone. 
+Bulk insertion is also made possible through CSV file
